@@ -1,0 +1,252 @@
+# ===============================
+
+# 🔰 SQL PHASE 1 NOTES (COMPLETE)
+
+# ===============================
+
+# 🎯 GOAL OF PHASE 1
+
+Learn how to:
+
+* Retrieve data (SELECT)
+* Filter data (WHERE)
+* Sort data (ORDER BY)
+* Limit data (FETCH / OFFSET in Oracle)
+* Use pattern matching (LIKE)
+* Apply logical conditions (AND, OR, NOT)
+
+---
+
+# 1. SELECT (DATA RETRIEVAL)
+
+---
+
+-- Select all columns
+SELECT * FROM employees;
+
+-- Select specific columns
+SELECT name, salary FROM employees;
+
+👉 Use specific columns in real-world (performance + clarity)
+
+---
+
+# 2. WHERE (FILTERING DATA)
+
+---
+
+-- Basic condition
+SELECT * FROM employees WHERE salary > 50000;
+
+-- Multiple conditions
+SELECT * FROM employees WHERE salary > 40000 AND dept_id = 2;
+
+-- OR condition
+SELECT * FROM employees WHERE dept_id = 1 OR dept_id = 3;
+
+-- NOT condition
+SELECT * FROM employees WHERE dept_id <> 2;
+
+👉 Operators:
+=, >, <, >=, <=, <>, !=
+
+---
+
+# 3. IN (MULTIPLE VALUES)
+
+---
+
+-- Cleaner alternative to OR
+SELECT * FROM customers WHERE city IN ('Mumbai','Pune','Delhi');
+
+-- NOT IN
+SELECT * FROM customers WHERE city NOT IN ('Mumbai','Pune');
+
+👉 Used heavily in interviews
+
+---
+
+# 4. BETWEEN (RANGE FILTER)
+
+---
+
+-- Inclusive range
+SELECT * FROM employees WHERE salary BETWEEN 40000 AND 60000;
+
+-- NOT BETWEEN
+SELECT * FROM employees WHERE salary NOT BETWEEN 30000 AND 50000;
+
+👉 BETWEEN includes both limits
+
+---
+
+# 5. LIKE (PATTERN MATCHING)
+
+---
+
+-- Starts with
+SELECT * FROM employees WHERE name LIKE 'A%';
+
+-- Ends with
+SELECT * FROM employees WHERE name LIKE '%a';
+
+-- Contains
+SELECT * FROM employees WHERE name LIKE '%ee%';
+
+-- Exact length (5 chars)
+SELECT * FROM employees WHERE name LIKE '_____';
+
+-- Second character 'a'
+SELECT * FROM employees WHERE name LIKE '_a%';
+
+👉 Wildcards:
+% → any number of characters
+_ → exactly one character
+
+⚠ Case sensitivity depends on DB (Oracle is case-sensitive)
+
+---
+
+# 6. ORDER BY (SORTING)
+
+---
+
+-- Ascending (default)
+SELECT name, salary FROM employees ORDER BY salary;
+
+-- Descending
+SELECT name, salary FROM employees ORDER BY salary DESC;
+
+-- Multiple column sorting
+SELECT name, hire_date, salary
+FROM employees
+ORDER BY hire_date DESC, salary ASC;
+
+👉 Sorting priority:
+1st column → main sort
+2nd column → tie-breaker
+
+---
+
+# 7. FETCH / OFFSET (ORACLE LIMIT)
+
+---
+
+-- Top 3 records
+SELECT * FROM employees ORDER BY salary DESC FETCH FIRST 3 ROWS ONLY;
+
+-- Skip 2, get next 3
+SELECT * FROM employees ORDER BY salary DESC OFFSET 2 ROWS FETCH NEXT 3 ROWS ONLY;
+
+👉 Execution order:
+
+1. ORDER BY
+2. OFFSET
+3. FETCH
+
+👉 Used for pagination
+
+---
+
+# 8. DATE FILTERING (ORACLE IMPORTANT)
+
+---
+
+-- Correct way
+SELECT * FROM employees WHERE hire_date > DATE '2021-01-01';
+
+-- Range
+SELECT * FROM employees
+WHERE hire_date BETWEEN DATE '2022-01-01' AND DATE '2022-12-31';
+
+⚠ Avoid:
+WHERE hire_date > '2021-01-01'  -- risky
+
+---
+
+# 9. COMBINED CONDITIONS (INTERVIEW LEVEL)
+
+---
+
+-- Multiple filters
+SELECT * FROM employees
+WHERE salary BETWEEN 30000 AND 50000
+AND dept_id <> 2;
+
+-- Mixed logic
+SELECT * FROM employees
+WHERE (dept_id = 1 OR dept_id = 3)
+AND salary > 40000;
+
+👉 Use brackets to control logic
+
+---
+
+# 10. PRACTICAL EXAMPLES
+
+---
+
+-- Example 1: Top 3 highest paid employees
+SELECT name, salary
+FROM employees
+ORDER BY salary DESC
+FETCH FIRST 3 ROWS ONLY;
+
+-- Example 2: Employees hired after 2020 with salary < 50000
+SELECT * FROM employees
+WHERE hire_date > DATE '2020-01-01'
+AND salary < 50000;
+
+-- Example 3: Products between 10k and 30k sorted descending
+SELECT * FROM products
+WHERE price BETWEEN 10000 AND 30000
+ORDER BY price DESC;
+
+-- Example 4: Customers not from Mumbai or Pune
+SELECT * FROM customers
+WHERE city NOT IN ('Mumbai','Pune');
+
+-- Example 5: 3rd to 5th highest priced products
+SELECT product_name, price
+FROM products
+ORDER BY price DESC
+OFFSET 2 ROWS FETCH NEXT 3 ROWS ONLY;
+
+---
+
+# 🔥 KEY INTERVIEW INSIGHTS
+
+---
+
+1. WHERE filters rows BEFORE sorting
+2. ORDER BY sorts AFTER filtering
+3. FETCH works AFTER ORDER BY
+4. BETWEEN is inclusive
+5. IN is better than multiple OR
+6. LIKE is used for pattern search
+7. OFFSET/FETCH used for pagination
+8. Always use DATE keyword in Oracle
+
+---
+
+# 🚀 PHASE 1 MASTERY CHECK
+
+---
+
+You are strong if you can:
+✔ Write complex WHERE conditions
+✔ Use LIKE patterns confidently
+✔ Combine AND/OR correctly
+✔ Sort using multiple columns
+✔ Use FETCH/OFFSET correctly
+
+---
+
+# 🎯 FINAL SUMMARY
+
+---
+
+Phase 1 = Data Retrieval + Filtering + Sorting
+
+👉 If you master this:
+You can already solve 40–50% SQL interview questions
